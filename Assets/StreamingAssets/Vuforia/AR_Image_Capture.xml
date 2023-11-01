@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+  <Tracking>
+    <ImageTarget name="EnergiaSolarCasa" size="1.000000 0.956055" />
+    <ImageTarget name="SolTierra" size="1.000000 0.956055" />
+  </Tracking>
+</QCARConfig>
