@@ -48,7 +48,7 @@ public class ArTargetCapture : Singleton<ArTargetCapture>
         arTargetContents = new Dictionary<string, ArTargetContent>();
 
         foreach (ArTargetContent itc in imageTargets)
-            arTargetContents.Add(itc.itb.TargetName, itc);
+            arTargetContents.Add(itc.GetImageTargetBehaviour().TargetName, itc);
 
         arCam = Camera.main;
         ResetFocusingTimer();
@@ -156,7 +156,7 @@ public class ArTargetCapture : Singleton<ArTargetCapture>
 
         foreach (KeyValuePair<string, ArTargetContent> itc in arTargetContents)
         {
-            if (itc.Value.itb.TargetStatus.Status == Status.TRACKED)
+            if (itc.Value.GetImageTargetBehaviour().TargetStatus.Status == Status.TRACKED)
             {
                 isAny = true;
                 break;
@@ -185,7 +185,7 @@ public class ArTargetCapture : Singleton<ArTargetCapture>
     private void OnPostRenderCamera(Camera cam)
     {
         if(currentTarget)
-            CheckAllCornersVisible(currentTarget.transform, currentTarget.itb.GetSize());
+            CheckAllCornersVisible(currentTarget.transform, currentTarget.GetImageTargetBehaviour().GetSize());
     }
 
     public bool CheckAllCornersVisible(Transform centerTran, Vector2 size)
@@ -337,15 +337,15 @@ public class ArTargetCapture : Singleton<ArTargetCapture>
         //Vector3 CamtoLocalPos = obj2.InverseTransformPoint(obj1.position);
         Vector3 obj2Pos = obj2.position;
 
-        bool insideWidth, insideLength, insideDepth = false;
+        //bool insideWidth, insideLength, insideDepth = false;
 
-        insideWidth = Mathf.Abs(obj2Pos.x) < bounds.x;
-        insideLength = Mathf.Abs(obj2Pos.y) < bounds.y;
-        insideDepth = Mathf.Abs(obj2Pos.z) < (bounds.z + heightRange) && Mathf.Abs(obj2Pos.z) > bounds.z;
+        //insideWidth = Mathf.Abs(obj2Pos.x) < bounds.x;
+        //insideLength = Mathf.Abs(obj2Pos.y) < bounds.y;
+        //insideDepth = Mathf.Abs(obj2Pos.z) < (bounds.z + heightRange) && Mathf.Abs(obj2Pos.z) > bounds.z;
 
         bool cameraStill = IsCameraStill();
 
-        return isMirrored && insideWidth && insideLength && insideDepth && allVisible && cameraStill;
+        return isMirrored /*&& insideWidth && insideLength && insideDepth*/ && allVisible && cameraStill;
     }
 
     public bool IsCameraStill()

@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Vuforia;
 
+[RequireComponent(typeof(ImageTargetBehaviour), typeof(DefaultObserverEventHandler))]
 public class ArTargetContent : MonoBehaviour
 {
     public string imageName;
-    public ImageTargetBehaviour itb;
     public Texture2D targetTex;
     public GameObject arContent;
     public Renderer[] targetRenderers;
@@ -16,10 +16,12 @@ public class ArTargetContent : MonoBehaviour
     public float distRange = 1f;
     public float heightRange = 1f;
     
+    ImageTargetBehaviour itb;
+    DefaultObserverEventHandler observer;
+
     void Awake()
     {
-        itb = GetComponent<ImageTargetBehaviour>();
-        imageName = itb.TargetName;
+        imageName = GetImageTargetBehaviour().TargetName;
 
         GetRenderers();
 
@@ -28,6 +30,23 @@ public class ArTargetContent : MonoBehaviour
         Vector2 bounds2D = (itb.GetSize() / 2f);
         
         imgBounds = new Vector3(bounds2D.x * distRange, (bounds2D.x + bounds2D.y) * 2f, bounds2D.y * distRange);
+
+        observer = GetComponent<DefaultObserverEventHandler>();
+        observer.OnTargetFound.AddListener(OnTargetFound);
+        observer.OnTargetLost.AddListener(OnTargetLost);
+    }
+
+    private void OnDestroy()
+    {
+        observer.OnTargetFound.RemoveListener(OnTargetFound);
+        observer.OnTargetLost.RemoveListener(OnTargetLost);
+    }
+
+    public ImageTargetBehaviour GetImageTargetBehaviour()
+    {
+        if (!itb)
+            itb = GetComponent<ImageTargetBehaviour>();
+        return itb;
     }
 
     void GetRenderers()
