@@ -16,9 +16,11 @@ public class CameraImageAccess : Singleton<CameraImageAccess>
 
     private int width;
     private int height;
+
     #endregion // PRIVATE_MEMBERS
 
-    #region MONOBEHAVIOUR_METHODS
+    #region MONOBEHAVIOUR MEMBERS
+
     void Start()
     {
         // Register Vuforia life-cycle callbacks:
@@ -35,9 +37,10 @@ public class CameraImageAccess : Singleton<CameraImageAccess>
         VuforiaApplication.Instance.OnVuforiaPaused -= OnPause;
         //VuforiaBehaviour.Instance.World.OnStateUpdated -= GetCameraTexture;
     }
-    #endregion // MONOBEHAVIOUR_METHODS
 
-    #region PRIVATE_METHODS
+    #endregion
+
+    #region PUBLIC MEMBERS
     /// 
     /// Called each time the Vuforia state is updated
     /// 
@@ -61,6 +64,11 @@ public class CameraImageAccess : Singleton<CameraImageAccess>
 
         return texture;
     }
+
+    #endregion
+
+    #region PRIVATE MEMBERS
+
     /// 
     /// Called when app is paused / resumed
     /// 
@@ -108,5 +116,6 @@ public class CameraImageAccess : Singleton<CameraImageAccess>
         VuforiaBehaviour.Instance.CameraDevice.SetFrameFormat(mPixelFormat, false);
         mFormatRegistered = false;
     }
-    #endregion //PRIVATE_METHODS
+
+    #endregion
 }

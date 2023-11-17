@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/AR Image Capture Folder/Example Scene/AR Image Capture Scene.unity
+    guid: f0ac7cdd176679a4c9820e247cfb13dc
   m_configObjects: {}
