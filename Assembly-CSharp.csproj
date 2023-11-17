@@ -60,10 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AR Image Capture Folder\Scripts\Singleton.cs" />
+    <Compile Include="Assets\AR Image Capture Folder\Scripts\ARImageCaptureCanvas.cs" />
     <Compile Include="Assets\AR Image Capture Folder\Scripts\ImageTargetContent.cs" />
     <Compile Include="Assets\AR Image Capture Folder\Scripts\CameraImageAccess.cs" />
     <Compile Include="Assets\AR Image Capture Folder\Scripts\ImageTargetCapture.cs" />
-    <Compile Include="Assets\AR Image Capture Folder\Scripts\CaptureResultCanvas.cs" />
     <Compile Include="Assets\AR Image Capture Folder\Scripts\OpenCVImageCapture.cs" />
   </ItemGroup>
   <ItemGroup>

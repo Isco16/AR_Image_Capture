@@ -9,16 +9,26 @@ public class OpenCVImageCapture : Singleton<OpenCVImageCapture>
 {
     #region PROPERTIES
 
-    public Texture inputTexture;
+    [HideInInspector] public Texture inputTexture;
+    [Tooltip("The projected texture result.")]
     public Texture2D resultTexture;
+
+    const int DEFAULT_WIDTH = 1024;
+    const int DEFAULT_HEIGHT = 1024;
 
     #endregion
 
     #region PUBLIC MEMBERS
 
-    public Texture2D CaptureImageTargetTexture(Texture texture, Vector2[] points)
+    /// <summary>
+    /// This method captures a section delimited by four <paramref name="points"/> inside an <paramref name="imageSource"/> and then projects it into a square texture.
+    /// </summary>
+    /// <param name="imageSource">The input image to proccess.</param>
+    /// <param name="points">The target's coordinates inside the input image dimensions.</param>
+    /// <returns>Returns a 2D texture of the projected image section.</returns>
+    public Texture2D CaptureImageTargetTexture(Texture imageSource, Vector2[] points)
     {
-        SetInputTexture(texture);
+        SetInputTexture(imageSource);
 
         if (points == null) return null;
 
@@ -51,7 +61,7 @@ public class OpenCVImageCapture : Singleton<OpenCVImageCapture>
 
         Imgproc.warpPerspective(inputMat, outputMat, perspectiveTransform, new Size(inputMat.cols(), inputMat.rows()));
 
-        Imgproc.resize(outputMat, outputMat, new Size(inputMat.cols(), inputMat.rows()));
+        Imgproc.resize(outputMat, outputMat, new Size(DEFAULT_HEIGHT, DEFAULT_WIDTH));
 
         Texture2D outputTexture = new Texture2D(outputMat.cols(), outputMat.rows(), TextureFormat.RGBA32, false);
 

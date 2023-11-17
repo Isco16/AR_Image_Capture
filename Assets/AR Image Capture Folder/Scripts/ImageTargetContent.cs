@@ -7,12 +7,23 @@ using Vuforia;
 public class ImageTargetContent : MonoBehaviour
 {
     #region PROPERTIES
-
+    [Tooltip("Augmented reality content parent.")]
     public GameObject arContent;
-    [Range(1f,5f)] public float maxDistanceFactor = 5f;
+    [Tooltip("The factor that determines the maximum camera distance.\n" +
+        "This value is multiplied by the minimum camera distance required to capture this target.")] 
+    [Range(2f,5f)]
+    public float maxDistanceFactor = 5f;
+    [Tooltip("List of renderers to apply the captured texture.")]
     public Renderer[] targetRenderers;
+    [Tooltip("Display a frame around the target bounds.")]
     public bool drawImageFrame;
+    [Tooltip("Frame prefab to instantiate.")]
     public GameObject linePrefab;
+
+    [Tooltip("Image resolution in X dimension.")]
+    public int xAxisDimension;
+    [Tooltip(".")]
+    public int yAxisDimension;
 
     float minDistance;
     float maxDistance;
@@ -65,6 +76,17 @@ public class ImageTargetContent : MonoBehaviour
 
     #region PRIVATE MEMBERS
 
+    void OnTargetFound()
+    {
+        ImageTargetCapture.instance.OnTargetFound(itb.TargetName);
+    }
+
+    void OnTargetLost()
+    {
+        ControlArContent(false);
+        ImageTargetCapture.instance.OnTargetLost();
+    }
+
     void GetRenderers()
     {
         MeshRenderer[] meshes = arContent.GetComponentsInChildren<MeshRenderer>();
@@ -95,27 +117,28 @@ public class ImageTargetContent : MonoBehaviour
 
     #region PUBLIC MEMBERS
 
+    /// <summary>
+    /// Gets the minimum distance range for this target.
+    /// </summary>
+    /// <returns>Min distance float value.</returns>
     public float GetMinDistance()
     {
         return minDistance;
     }
 
+    /// <summary>
+    /// Gets the maximum distance range for this target.
+    /// </summary>
+    /// <returns>Max distance float value.</returns>
     public float GetMaxDistance()
     {
         return maxDistance;
     }
 
-    public void OnTargetFound()
-    {
-        ImageTargetCapture.instance.OnTargetFound(itb.TargetName);
-    }
-
-    public void OnTargetLost()
-    {
-        ControlArContent(false);
-        ImageTargetCapture.instance.OnTargetLost();
-    }
-
+    /// <summary>
+    /// Gets the Image Target Behaviour component.
+    /// </summary>
+    /// <returns>ImageTargetBehaviour object reference</returns>
     public ImageTargetBehaviour GetImageTargetBehaviour()
     {
         if (!itb)
@@ -123,6 +146,10 @@ public class ImageTargetContent : MonoBehaviour
         return itb;
     }
 
+    /// <summary>
+    /// Gets the world corner positions based on the image target's local dimensions.
+    /// </summary>
+    /// <returns>Target's 3D world corner positions.</returns>
     public Vector3[] GetWorldCornersPositions()
     {
         Vector2 size = itb.GetSize();
@@ -136,17 +163,28 @@ public class ImageTargetContent : MonoBehaviour
         return worldCornersPos;
     }
 
+    /// <summary>
+    /// Activate or deactivate the AR content's parent depending on the <paramref name="value"/> passed in.
+    /// </summary>
+    /// <param name="value">Passing a true value activates the content, while passing a false value deactivates the content.</param>
     public void ControlArContent(bool value)
     {
         arContent.SetActive(value);
     }
 
-    public void ApplyCapture2Renderers(Texture2D capture)
+    /// <summary>
+    /// Applies the given <paramref name="capture"/> texture to all objects inside the renderer list.
+    /// </summary>
+    /// <param name="capture">The texture to apply to.</param>
+    public void ApplyCaptureToRenderers(Texture2D capture)
     {
         foreach (Renderer rend in targetRenderers)
             rend.material.SetTexture("_MainTex",capture);
     }
 
+    /// <summary>
+    /// Instantiates and displays the frame around the target's bound.
+    /// </summary>
     public void DrawImageTargetFrame()
     {
         Vector3[] arrengedPoints = new Vector3[worldCornersPos.Length];

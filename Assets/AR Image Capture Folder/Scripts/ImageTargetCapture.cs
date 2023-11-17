@@ -10,12 +10,17 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
     #region PROPERTIES
 
     // Image Capture Settings
+    [Tooltip("Vuforia AR camera.")]
     public Camera arCam;
+    [Tooltip("Maximum camera movement permitted for image capture.")]
     public float maxCameraShakeRange;
     int shakeValuesLength = 20;
     List<float> shakeValuesList;
 
     // Image Target Capture Events
+    [Space(4f)]
+    [Header("Events")]
+    [Space(4f)]
     public UnityEvent onTargetFound;
     public UnityEvent onTargetLost;
     public UnityEvent onTargetMeetReqts;
@@ -24,12 +29,12 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
 
     // Image Tracking State Data
     enum AR_State { OnTargetLost, OnTargetFound, ImageCaptured }
-    [SerializeField] AR_State arState;
+    AR_State arState;
     bool targetMeetsReqts;
 
     // Image Targets Data
     Dictionary<string, ImageTargetContent> arTargetContents;
-    [SerializeField] ImageTargetContent currentTarget;
+    ImageTargetContent currentTarget;
     string currentTargetId;
 
     // Vuforia Camera Background
@@ -53,7 +58,7 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
         foreach (ImageTargetContent itc in imageTargets)
             arTargetContents.Add(itc.GetImageTargetBehaviour().TargetName, itc);
 
-        arCam = Camera.main;
+        arCam = VuforiaBehaviour.Instance.GetComponent<Camera>();
         arState = AR_State.OnTargetLost;
         
         Resources.UnloadUnusedAssets();
@@ -92,6 +97,7 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
     {
         currentTargetId = trgIdx;
         currentTarget = arTargetContents[currentTargetId];
+        onTargetFound.Invoke();
         arState = AR_State.OnTargetFound;
     }
 
@@ -116,7 +122,7 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
                 ResetValidationValues();
                 break;
             case AR_State.OnTargetFound:
-                FocusingBehaviour();
+                CaptureBehaviour();
                 break;
             case AR_State.ImageCaptured:
                 break;
@@ -148,7 +154,7 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
     }
 
     // FUNCTION WHICH DETERMINE WHETHER TO TAKE A CAPTURE OR NOT
-    void FocusingBehaviour()
+    void CaptureBehaviour()
     {
         bool targetMeetingReqts = IsTargetMeetingRequirements(arCam, currentTarget);
         if (currentTarget.drawImageFrame)
@@ -170,6 +176,9 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
 
     #region IMAGE CAPTURE MEMBERS
 
+    /// <summary>
+    /// This method captures the image target section only if all requirements are met.
+    /// </summary>
     public void CaptureArImage()
     {
         if (!targetMeetsReqts) return;
@@ -178,7 +187,7 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
         Texture2D capture = OpenCVImageCapture.instance.CaptureImageTargetTexture(cameraTex, projectedPoints);
 
         currentTarget.ControlArContent(true);
-        currentTarget.ApplyCapture2Renderers(capture);
+        currentTarget.ApplyCaptureToRenderers(capture);
         onTargetCaptured?.Invoke();
         arState = AR_State.ImageCaptured;
     }

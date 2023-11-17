@@ -1,12 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CaptureResultCanvas : MonoBehaviour
+public class ARImageCaptureCanvas : MonoBehaviour
 {
     #region PROPERTIES
 
     public Image resultImage;
     public Button captureBtn;
+
+    #endregion
+
+    #region MONOBEHAVIOUR MEMBERS
+
+    private void Start()
+    {
+        DisableCaptureBtn();
+        HideCaptureResult();
+        captureBtn.onClick.AddListener(CaptureResultBtnEvent);
+    }
+
+    private void OnDestroy()
+    {
+        captureBtn.onClick.RemoveListener(CaptureResultBtnEvent);
+    }
 
     #endregion
 
@@ -22,8 +38,9 @@ public class CaptureResultCanvas : MonoBehaviour
         captureBtn.gameObject.SetActive(false);
     }
 
-    public void ShowCaptureResult()
+    public void CaptureResultBtnEvent()
     {
+        ImageTargetCapture.instance.CaptureArImage();
         SetResultImage();
         resultImage.gameObject.SetActive(true);
     }
