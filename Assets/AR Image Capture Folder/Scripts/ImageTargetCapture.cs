@@ -122,7 +122,7 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
                 ResetValidationValues();
                 break;
             case AR_State.OnTargetFound:
-                CaptureBehaviour();
+                OnTargetFoundBehaviour();
                 break;
             case AR_State.ImageCaptured:
                 break;
@@ -153,8 +153,10 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
         targetMeetsReqts = false;
     }
 
-    // FUNCTION WHICH DETERMINE WHETHER TO TAKE A CAPTURE OR NOT
-    void CaptureBehaviour()
+    /// <summary>
+    /// FUNCTION WHICH DETERMINE WHETHER TO TAKE A CAPTURE OR NOT
+    /// </summary>
+    void OnTargetFoundBehaviour()
     {
         bool targetMeetingReqts = IsTargetMeetingRequirements(arCam, currentTarget);
         if (currentTarget.drawImageFrame)

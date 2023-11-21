@@ -64,12 +64,19 @@ public class ImageTargetContent : MonoBehaviour
         float FOVradians = baseAngle * Mathf.Deg2Rad;
         minDistance = (itb.GetSize().x / 2f) / Mathf.Tan(FOVradians);
         maxDistance = minDistance * maxDistanceFactor;
+
     }
 
     private void OnDestroy()
     {
         observer.OnTargetFound.RemoveListener(OnTargetFound);
         observer.OnTargetLost.RemoveListener(OnTargetLost);
+    }
+
+    private void Update()
+    {
+        print(itb.GetRuntimeTargetTexture());
+
     }
 
     #endregion
