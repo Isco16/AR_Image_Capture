@@ -201,7 +201,18 @@ public class ImageTargetContent : MonoBehaviour
         arrengedPoints[3] = worldCornersPos[2];
         if (!targetFrame)
             InstantiateLineRenderer();
+        ControlFrame(true);
         targetFrame.SetPositions(arrengedPoints);
+    }
+
+    /// <summary>
+    /// Controls the activation or deactivation of the target frame object in the scene
+    /// </summary>
+    /// <param name="activate"></param>
+    public void ControlFrame(bool activate)
+    {
+        if(targetFrame.gameObject.activeSelf != activate)
+            targetFrame.gameObject.SetActive(activate);
     }
 
     #endregion

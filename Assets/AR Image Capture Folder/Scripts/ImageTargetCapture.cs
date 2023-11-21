@@ -125,6 +125,7 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
                 OnTargetFoundBehaviour();
                 break;
             case AR_State.ImageCaptured:
+                ImageCapturedBehaviour();
                 break;
         }
     }
@@ -172,6 +173,15 @@ public class ImageTargetCapture : Singleton<ImageTargetCapture>
         }
 
         targetMeetsReqts = targetMeetingReqts;
+    }
+
+    /// <summary>
+    /// This method is called after the target image has been captured
+    /// </summary>
+    void ImageCapturedBehaviour()
+    {
+        if (currentTarget.drawImageFrame)
+            currentTarget.ControlFrame(false);
     }
 
     #endregion
