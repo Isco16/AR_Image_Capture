@@ -11,4 +11,4 @@ AR Image Capture project was made with Unity 2022.3.12f1 version.
 # Algorithm class diagram
 ![ClassDiagram](https://github.com/Isco16/AR_Image_Capture/assets/112453307/84f983f9-013f-4cfd-a51d-dd92a3b694b9)
 
-https://youtu.be/u0hb3MhlETI?si=ufmrsQpa3ohWKZi8
+<iframe width="560" height="315" src="https://www.youtube.com/embed/u0hb3MhlETI?si=ufmrsQpa3ohWKZi8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
